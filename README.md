@@ -1180,9 +1180,10 @@ for filename in filenames:
 
     inflammation-01.csv
 
-
+## Using multiple files 
 
 ![png](output_2_1.png)
+![output_2_1](https://github.com/user-attachments/assets/cfe2f6a0-3fb2-4e81-9d76-d5a4292d3eea)
 
 
     inflammation-02.csv
@@ -1190,6 +1191,7 @@ for filename in filenames:
 
 
 ![png](output_2_3.png)
+![output_2_3](https://github.com/user-attachments/assets/09f30801-1327-4d8d-86b9-a85d48ae35be)
 
 
     inflammation-03.csv
@@ -1197,12 +1199,406 @@ for filename in filenames:
 
 
 ![png](output_2_5.png)
+![output_2_5](https://github.com/user-attachments/assets/cafc6d22-0656-4ac0-bbf6-b4fcfd25ffc5)
 
 
 
 ```python
 
 ```
+
+## Making choices 
+
+```python
+import numpy
+```
+
+
+```python
+data = numpy.loadtxt(fname='inflammation-01.csv', delimiter = ',')
+```
+
+
+```python
+max_inflammation_0 = numpy.amax(data, axis = 0)[0]
+```
+
+
+```python
+max_inflammation_20 = numpy.amax(data, axis = 0)[20]
+
+if max_inflammation_0 == 0 and max_inflammation_20 ==20:
+    print('Saspictious looking maximal')
+    
+elif numpy.sum(numpy.amin(data, axis =0)) == 0:
+    print('Minima add up to zero')
+    
+else:
+    print('Seems ok')
+```
+
+    Saspictious looking maximal
+
+
+
+```python
+data = numpy.loadtxt(fname = 'inflammation-03.csv', delimiter = ',')
+
+max_inflammation_0 = numpy.amax(data, axis = 0)[0]
+
+max_inflammation_20 = numpy.amax(data, axis = 0)[20]
+
+if max_inflammation_0 == 0 and max_inflammation_20 == 20:
+    print('Suspicious looking maxima')
+elif numpy.sum(numpy.amin(data, axis = 0)) == 0:
+    print('Minima add up to zero -> HEALTHY PARTICIPANT ALERT')
+else: 
+    print('Seems ok')
+```
+
+    Minima add up to zero -> HEALTHY PARTICIPANT ALERT
+
+
+
+```python
+
+```
+## Functions
+
+```python
+farenheit_val = 99
+celsius_val = ((farenheit_val - 32) *(5/9))
+
+print(celsius_val)
+```
+
+    37.22222222222222
+
+
+
+```python
+farenheit_val2 = 43
+celsius_val2 = ((farenheit_val2 -32) * (5/9))
+
+print(celsius_val2)
+```
+
+    6.111111111111112
+
+
+
+```python
+def explicit_fahr_to_celsius(temp):
+    # assign the converted value to a variable
+    converted = ((temp - 32) * (5/9))
+    # return the value of the new variable 
+    return converted 
+```
+
+
+```python
+def fahr_to_celsius(temp):
+    # return converted valuues more efficiently using the return function without reading a new variable. This code does the same thing as the previous function but it is more explicit tin explaining how the return command works 
+    return((temp - 32) * (5/9))
+```
+
+
+```python
+fahr_to_celsius(32)
+```
+
+
+
+
+    0.0
+
+
+
+
+```python
+explicit_fahr_to_celsius(32)
+```
+
+
+
+
+    0.0
+
+
+
+
+```python
+print('Freezing point of water:', fahr_to_celsius(32), 'C')
+print('Boiling point of water:', fahr_to_celsius(212), 'C')
+```
+
+    Freezing point of water: 0.0 C
+    Boiling point of water: 100.0 C
+
+
+
+```python
+def celsius_to_kelvin(temp_c):
+    return temp_c + 273.15
+
+print('freezing point of water in Kelvin:', celsius_to_kelvin(0.))
+```
+
+    freezing point of water in Kelvin: 273.15
+
+
+
+```python
+def fahr_to_kelvin(temp_f):
+    temp_c = fahr_to_celsius(temp_f)
+    temp_k = celsius_to_kelvin(temp_c)
+    return temp_k
+print('boiling point of water in Kelvin:', fahr_to_kelvin(212.0))
+```
+
+    boiling point of water in Kelvin: 373.15
+
+
+
+```python
+temp_kelvin = fahr_to_kelvin(212.0)
+print('Temperature in Kelvin was:', temp_kelvin)
+```
+
+    Temperature in Kelvin was: 373.15
+
+
+
+```python
+def print_temperatures():
+    print('Temperature in Fahrenheit was:', temp_fahr)
+    print('Temperature in Kelvin was:', temp_kelvin)
+    
+temp_fahr = 212.0
+temp_kelvin = fahr_to_kelvin(temp_fahr)
+
+print_temperatures()
+```
+
+    Temperature in Fahrenheit was: 212.0
+    Temperature in Kelvin was: 373.15
+
+
+
+```python
+
+```
+## Defensive Programming
+```python
+numbers = [1.5, 2.3, 0.7, 0.001, 4.4]
+total = 0.0
+for num in numbers: 
+    assert num > 0.0, 'Data should only contain positive values'
+    total += num
+print('total is:', total)
+```
+
+    total is: 8.901
+
+
+
+```python
+def normalize_rectangle(rect):
+    """Normalize a rectangle so that it is at the origin and 1.0 units long on its longest axis.
+    input should be of the format (x0, y0, x1, y1).
+    (x0, y0) and (x1, y1) define the lower left and upper right corners of the rectangle respectively"""
+    assert len(rect) ==4, 'Rectangles must contain 4 coordinates'
+    x0, y0, x1, y1 = rect
+    assert x0 < x1, 'invalid x coordinates'
+    assert y0 < y1, 'invalid y coordinates'
+    
+    dx = x1 - x0
+    dy = y1 - y0
+    if dx > dy:
+        scaled = dx / dy
+        upper_x, upper_y = 1.0, scaled 
+    else: 
+        scaled = dx / dy
+        upper_x, upper_y = scaled, 1.0
+    assert 0 < upper_x <= 1.0, 'Calculated upper X coordinate invalid '
+    assert 0 < upper_y <= 1.0, 'Calculated upper Y coordinate invalid '
+    
+    return (0, 0, upper_x, upper_y)
+```
+
+
+```python
+print(normalize_rectangle((0.0, 0.0, 1.0, 5.0)))
+```
+
+    (0, 0, 0.2, 1.0)
+
+
+
+```python
+print(normalize_rectangle(0.0, 0.0, 5.0, 1.0))
+```
+## Transcribing DNA into RNA 
+
+```python
+#Prompt user to enter the input fasta file name 
+
+input_file_name = input('Enter the name of the input fasta file:')
+```
+
+    Enter the name of the input fasta file: sequence.txt
+
+
+
+```python
+# Open the input fasta file and read the DNA sequence 
+
+with open(input_file_name, 'r') as input_file:
+    dna_sequence = ''
+    for line in input_file: 
+        if line.startswith('>'):
+            continue 
+        dna_sequence += line.strip()
+```
+
+
+```python
+# Transcribe the DNA to RNA
+rna_sequence = ''
+for nucleotide in dna_sequence: 
+    if nucleotide == 'T':
+        rna_sequence += 'U'
+    else: 
+        rna_sequence += nucleotide
+```
+
+
+```python
+# Prompt the user to enter the output file name
+
+output_file_name = input('Enter the name of the output file:')
+```
+
+    Enter the name of the output file: Ubiquitin
+
+
+
+```python
+# Save the RNA sequence to a text file
+
+with open(output_file_name, 'w') as output_file:
+    output_file.write(rna_sequence)
+    print("The RNA sequence has been saved to {output_file_name}")
+```
+
+    The RNA sequence has been saved to {output_file_name}
+
+
+
+```python
+print(rna_sequence)
+```
+
+    AUGUCUGACGAAAAGAAGGGAGGUGAGACCGAGCACAUCAACCUGAAGGUCCUCGGCCAGGACAACGCCGUCGUCCAGUUCAAGAUCAAGAAGCACACACCCUUGAGGAAGCUGAUGAACGCCUACUGCGACCGUGCCGGACUCUCCAUGCAGGUGGUGCGCUUCCGUUUCGACGGACAGCCCAUCAACGAGAACGACACUCCGACCUCGCUGGAGAUGGAGGAGGGCGACACCAUCGAGGUUUACCAGCAGCAGACUGGUGGCGCUCCAUAAAUGUCUGACGAAAAGAAGGGAGGUGAGACCGAGCACAUCAACCUGAAGGUCCUCGGCCAGGACAACGCCGUCGUCCAGUUCAAGAUCAAGAAGCACACACCCUUGAGGAAGCUGAUGAACGCCUACUGCGACCGUGCCGGACUCUCCAUGCAGGUGGUGCGCUUCCGUUUCGACGGACAGCCCAUCAACGAGAACGACACUCCGACCUCGCUGGAGAUGGAGGAGGGCGACACCAUCGAGGUUUACCAGCAGCAGACUGGUGGCGCUCCAUAA
+
+
+
+```python
+
+```
+## Translating RNA into protein 
+
+```python
+# Prompt the user to enter the input RNA file name 
+
+input_file_name = input('Enter the name of the RNA file:')
+```
+
+    Enter the name of the RNA file: Ubiquitin
+
+
+
+```python
+# Open the input RNA file and read the RNA sequence 
+
+with open(input_file_name, 'r') as input_file:
+    rna_sequence = input_file.read().strip()
+```
+
+
+```python
+# Define the codon table 
+
+codon_table = {
+    "UUU": 'F', 'UUC': 'F', 'UUA': 'L', 'UUG': 'L',
+    'CUU': 'L', 'CUC': 'L', 'CUA': 'L', 'CUG': 'L',
+    'AUU': 'I', 'AUC': 'I', 'AUA': 'I', 'AUG': 'M',
+    'GUU': 'V', 'GUC': 'V', 'GUA': 'V', 'GUG': 'V',
+    'UCU': 'S', 'UCC': 'S', 'UCA': 'S', 'UCG': 'S',
+    'CCU': 'P', 'CCC': 'P', 'CCA': 'P', 'CCG': 'P',
+    'ACU': 'T', 'ACC': 'T', 'ACA': 'T', 'ACG': 'T', 
+    'GCU': 'A', 'GCC': 'A', 'GCA': 'A', 'GCG': 'A',
+    'UAU': 'Y', 'UAC': 'Y', 'UAA': '*', 'UAG': '*',
+    'CAU': 'H', 'CAC': 'H', 'CAA': 'Q', 'CAG': 'Q', 
+    'AAU': 'N', 'AAC': 'N', 'AAA': 'K', 'AAG': 'K',
+    'GAU': 'D', 'GAC': 'D', 'GAA': 'E', 'GAG': 'E',
+    'UGU': 'C', 'UGC': 'C', 'UGA': '*', 'UGG': 'W',
+    'CGU': 'R', 'CGC': 'R', 'CGA': 'R', 'CGG': 'R',
+    'AGU': 'S', 'AGC': 'S', 'AGA': 'R', 'AGG': 'R', 
+    'GGU': 'G', 'GGC': 'G', 'GGA': 'G', 'GGG': 'G'
+}
+```
+
+
+```python
+# Translate RNA to protein 
+
+protein_sequence = " "
+for i in range(0, len(rna_sequence), 3):
+    codon = rna_sequence[i:i+3]
+    if len(codon) == 3: 
+        amino_acid = codon_table[codon]
+        if amino_acid == '*':
+            break 
+        protein_sequence += amino_acid
+```
+
+
+```python
+# Prompt the user to enter the output file name 
+
+output_file_name = input('Enter the name of the output file: ')
+```
+
+    Enter the name of the output file:  Ubiquitin_protein.txt
+
+
+
+```python
+# Save the protein sequence to a text file 
+
+with open(output_file_name, 'w') as output_file:
+    output_file.write(protein_sequence)
+    print("The protein sequence has been saved to {output_file_name}")
+    
+```
+
+    The protein sequence has been saved to {output_file_name}
+
+
+
+```python
+print(protein_sequence)
+```
+
+     MSDEKKGGETEHINLKVLGQDNAVVQFKIKKHTPLRKLMNAYCDRAGLSMQVVRFRFDGQPINENDTPTSLEMEEGDTIEVYQQQTGGAP
+
+
+
+```python
+
+```
+
 
 
 ```python
